@@ -20,11 +20,16 @@ const app = express();
 
 
 /* Método get, permite obtener todos los usuario guardados en la base de datos */
+
 app.get('/usuario', function (req, res) {
 
 
+    /* obtener el parametro recibido en la url, en este caso, el inicio de la busqueda, este se encarga de buscar los usuarios a partir del indicado en el parametro, en caso contrario empieza en 0 */
     let desde = req.query.desde || 0;
     desde = Number(desde);
+
+
+    /* Numero de registros a buscar, este indica la cantidad de registros que se muestran por paginación, si no se especifica se toma como default el 5 */
 
     let limite = req.query.limite || 5;
     limite = Number(limite);
@@ -47,12 +52,10 @@ app.get('/usuario', function (req, res) {
                     usuarios,
                     registros:conteo
                 });
-            });
-
-            
+            });  
         })
-
 });
+
 
 /* Método post, permite agregar un nuevo registro a la tabla usuario*/
   
@@ -81,6 +84,7 @@ app.post('/usuario', function (req, res) {
     });  
   });
 
+
 /* Método put, permite modificar los datos de un usuario según su id, se hace uso del modulo underscore para obtener solo los atributos que se pueden modificar del usuario */
   
 app.put('/usuario/:id', function (req, res) {
@@ -102,6 +106,7 @@ app.put('/usuario/:id', function (req, res) {
         })
     })  
 });
+
 
 
 /* Delete, permite eliminar un usuario de los registros de la base de datos */

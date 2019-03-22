@@ -1,12 +1,17 @@
 
-
+/* Modulos importados */
 const mongoose = require('mongoose');
 const uniqueValidator= require('mongoose-unique-validator');
+
+
+/* Variable con los tipos de roles adminitidos, y mensaje en caso de que sea ingresado un rol que no este en el values, para usarlo al atributo role, se le agrega enum:rolesValidos */
 
 let rolesValidos = {
     values: ['ADMIN_ROLE', 'USER_ROLE'],
     message: '{VALUE} no es un rol válido'
 }
+
+/* Creando un nuevo esquema de usuario */
 
 let Schema = mongoose.Schema;
 
@@ -43,6 +48,9 @@ let usuarioSchema = new Schema({
     }
 });
 
+
+/* función para retornar el objeto usuario sin la contraseña, esto con el fin de que no sea revelada */
+
 usuarioSchema.methods.toJSON = function(){
     let user = this;
     let userObject = user.toObject();
@@ -51,6 +59,8 @@ usuarioSchema.methods.toJSON = function(){
     return userObject;
 }
 
+
+/* Mensaje de validación para datos que deben ser únicos en la base de datos */
 
 usuarioSchema.plugin( uniqueValidator, {
     message: '{PATH} debe de ser único'
