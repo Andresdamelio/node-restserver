@@ -21,7 +21,37 @@ const app = express();
 
 /* Método get, permite obtener todos los usuario guardados en la base de datos */
 app.get('/usuario', function (req, res) {
-    res.json('get usuario local')
+
+
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+
+    let limite = req.query.limite || 5;
+    limite = Number(limite);
+
+    
+    Usuario.find({})
+        .skip(desde)
+        .limit(limite)
+        .exec((err, usuarios) => {
+            if(err){
+                return res.status(400).json({
+                    ok:false,
+                    err
+                })
+            }
+
+            Usuario.count({}, (err, conteo)=>{
+                res.json({
+                    ok:true,
+                    usuarios,
+                    registros:conteo
+                });
+            });
+
+            
+        })
+
 });
 
 /* Método post, permite agregar un nuevo registro a la tabla usuario*/
@@ -38,7 +68,7 @@ app.post('/usuario', function (req, res) {
 
     usuario.save((err,usuarioDB) =>{
         if(err){
-        return res.status(400).json({
+            return res.status(400).json({
                 ok:false,
                 err
             })
