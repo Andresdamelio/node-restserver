@@ -152,3 +152,5 @@ app.delete('/usuario/:id', function (req, res) {
 
 /* Exportando el objeto app para ser accedido desde cualquier otro archivo */
 module.exports = app;
+
+

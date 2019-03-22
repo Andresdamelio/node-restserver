@@ -20,7 +20,9 @@ app.use(bodyParser.json());
 app.use(require('./routes/usuario'));
    
 
-mongoose.connect('mongodb://172.17.0.2:27017/cafe', (err, res)=>{
+mongoose.connect('mongodb://172.17.0.2:27017/cafe', 
+                { useNewUrlParser: true, useCreateIndex: true },
+                (err, res)=>{
     
     if ( err ){
         throw err;
