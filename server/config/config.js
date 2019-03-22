@@ -18,10 +18,10 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 let urlDB;
 
-//if ( process.env.NODE_ENV == 'dev' ) {
-//    urlDB = 'mongodb://172.17.0.2:27017/cafe' 
-//} else {
-    urlDB = 'mongodb+srv://andresdamelio:Brando.170315.2011@cluster0-5l2ze.mongodb.net/cafe'
-//}
+if ( process.env.NODE_ENV == 'dev' ) {
+    urlDB = 'mongodb://172.17.0.2:27017/cafe';
+} else {
+    urlDB = process.env.MONGO_URI;
+}
 
 process.env.urlDB = urlDB; 
