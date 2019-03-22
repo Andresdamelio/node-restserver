@@ -35,7 +35,9 @@ app.get('/usuario', function (req, res) {
     limite = Number(limite);
 
     
-    Usuario.find({})
+    /* El segundo argumento sirve para filtrar los datos que queremos mostrar, en este caso, la petición enviará solo el nombre, email y role de cada usuario */
+
+    Usuario.find({estado: true}, 'nombre email role estado')
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -46,7 +48,7 @@ app.get('/usuario', function (req, res) {
                 })
             }
 
-            Usuario.count({}, (err, conteo)=>{
+            Usuario.count({estado: true}, (err, conteo)=>{
                 res.json({
                     ok:true,
                     usuarios,
@@ -109,10 +111,42 @@ app.put('/usuario/:id', function (req, res) {
 
 
 
-/* Delete, permite eliminar un usuario de los registros de la base de datos */
+/* Delete, permite eliminar un usuario de los registros de la base de datos (Eliminacón fisica) */
   
-app.delete('/usuario', function (req, res) {
-    res.json('delete usuario')
+app.delete('/usuario/:id', function (req, res) {
+    
+    let id = req.params.id;
+
+    let cambiaEstado = {
+        estado:false
+    }
+
+    //Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+    Usuario.findByIdAndUpdate(id, cambiaEstado, {new: true}, (err, usuarioBorrado) => {
+        if(err){
+            return res.status(400).json({
+                ok:false,
+                err
+            })
+        }
+
+        if( !usuarioBorrado ){
+            return res.status(400).json({
+                ok:false,
+                err:{
+                    message: 'Usuario no encontrado'
+                }
+            })   
+        }
+
+        res.json({
+            ok:true,
+            usuario: usuarioBorrado
+        });
+    })
+
+
+
 });
 
 
