@@ -1,9 +1,14 @@
 
-require('./config/config')
+/* Archivo de configuración(produccion y desarrollo)  */
+require('./config/config');
+
+/* Paquetes importados */
 const express = require('express');
-const app = express();
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+/* Inicialización de express */
+const app = express();
 
 /*  parse application/x-www-form-urlencode */
 app.use(bodyParser.urlencoded({ extended: false}));
@@ -11,40 +16,18 @@ app.use(bodyParser.urlencoded({ extended: false}));
 /* parse application/json */
 app.use(bodyParser.json());
 
-app.get('/usuario', function (req, res) {
-  res.json('get usuario')
-});
 
-app.post('/usuario', function (req, res) {
+app.use(require('./routes/usuario'));
+   
 
-    let body = req.body;
-
-    if( body.nombre === undefined ){
-        res.status(400).json({
-            ok: false,
-            mensaje: 'EL nombre es necesario' 
-        })
-    }else {
-        res.json({
-            persona: body
-        })
+mongoose.connect('mongodb://172.17.0.2:27017/cafe', (err, res)=>{
+    
+    if ( err ){
+        throw err;
     }
 
-    
+    console.log('Base de datos online');
 });
-
-app.put('/usuario/:id', function (req, res) {
-
-    let id = req.params.id;
-    res.json({
-        id,
-    })
-});
-
-app.delete('/usuario', function (req, res) {
-    res.json('delete usuario')
-});
-   
  
 app.listen(process.env.PORT, () => {
     console.log('Escuchando el puerto 3000');
