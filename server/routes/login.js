@@ -55,7 +55,7 @@ app.post('/login', (req, res) => {
 
        let token = jwt.sign({
           usuario: usuarioDB,
-       }, process.env.SEED, { expiresIn: proccess.env.EXPIRATION_TOKEN });
+       }, process.env.SEED, { expiresIn: process.env.EXPIRATION_TOKEN });
 
        /* En caso de que no ocurra ningún incoveniente, se envia la respuesta positiva, con un estatus 200, ademas se envia el usuario y el token de acceso */
 

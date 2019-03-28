@@ -14,6 +14,9 @@ const _ = require('underscore');
 /* Modelo usuario */
 const Usuario = require('../models/usuario');
 
+/* middlewares */
+const {  verificationToken } = require('../middlewares/autenticacion');
+
 /* inicializacion de express */
 const app = express();
 
@@ -21,7 +24,7 @@ const app = express();
 
 /* Método get, permite obtener todos los usuario guardados en la base de datos */
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', verificationToken, (req, res) => {
 
 
     /* obtener el parametro recibido en la url, en este caso, el inicio de la busqueda, este se encarga de buscar los usuarios a partir del indicado en el parametro, en caso contrario empieza en 0 */
@@ -61,7 +64,7 @@ app.get('/usuario', function (req, res) {
 
 /* Método post, permite agregar un nuevo registro a la tabla usuario*/
   
-app.post('/usuario', function (req, res) {
+app.post('/usuario', (req, res) => {
   
     let body = req.body;
     let usuario = new Usuario({
@@ -89,7 +92,7 @@ app.post('/usuario', function (req, res) {
 
 /* Método put, permite modificar los datos de un usuario según su id, se hace uso del modulo underscore para obtener solo los atributos que se pueden modificar del usuario */
   
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -113,7 +116,7 @@ app.put('/usuario/:id', function (req, res) {
 
 /* Delete, permite eliminar un usuario de los registros de la base de datos (Eliminacón fisica) */
   
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id', (req, res) => {
     
     let id = req.params.id;
 
