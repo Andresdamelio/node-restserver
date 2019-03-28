@@ -4,6 +4,7 @@
 
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const usuario = require('../models/usuario');
 const app = express();
 
@@ -48,12 +49,20 @@ app.post('/login', (req, res) => {
         })
        }
 
+
+       /* Generación de token, utilizando el paquete jsonwebtoken */
+
+
+       let token = jwt.sign({
+          usuario: usuarioDB,
+       }, process.env.SEED, { expiresIn: proccess.env.EXPIRATION_TOKEN });
+
        /* En caso de que no ocurra ningún incoveniente, se envia la respuesta positiva, con un estatus 200, ademas se envia el usuario y el token de acceso */
 
        res.json({
             ok:true,
             usuario: usuarioDB,
-            token:'123'
+            token
         })
     })
 });
