@@ -15,7 +15,7 @@ const _ = require('underscore');
 const Usuario = require('../models/usuario');
 
 /* middlewares */
-const {  verificationToken } = require('../middlewares/autenticacion');
+const {  verificationToken, verificationAdmin } = require('../middlewares/autenticacion');
 
 /* inicializacion de express */
 const app = express();
@@ -64,7 +64,7 @@ app.get('/usuario', verificationToken, (req, res) => {
 
 /* Método post, permite agregar un nuevo registro a la tabla usuario*/
   
-app.post('/usuario', (req, res) => {
+app.post('/usuario', [verificationToken, verificationAdmin], (req, res) => {
   
     let body = req.body;
     let usuario = new Usuario({
