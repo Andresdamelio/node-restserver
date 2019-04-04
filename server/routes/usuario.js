@@ -92,7 +92,7 @@ app.post('/usuario', (req, res) => {
 
 /* Método put, permite modificar los datos de un usuario según su id, se hace uso del modulo underscore para obtener solo los atributos que se pueden modificar del usuario */
   
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', verificationToken, (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -114,9 +114,9 @@ app.put('/usuario/:id', (req, res) => {
 
 
 
-/* Delete, permite eliminar un usuario de los registros de la base de datos (Eliminacón fisica) */
+/* Delete, permite eliminar un usuario de los registros de la base de datos (Eliminacón fisica, y logica) */
   
-app.delete('/usuario/:id', (req, res) => {
+app.delete('/usuario/:id', verificationToken, (req, res) => {
     
     let id = req.params.id;
 

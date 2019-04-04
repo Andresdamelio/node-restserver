@@ -16,7 +16,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 /* 
 =================== Expiracion token ==================
 */
-process.env.EXPIRATION_TOKEN = 60 * 60 * 24;
+process.env.EXPIRATION_TOKEN = 60 * 60 * 24 * 30;
 
 /* 
 =================== Semilla de autenticación ==================
