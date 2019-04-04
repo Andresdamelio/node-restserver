@@ -116,7 +116,7 @@ app.put('/usuario/:id', [verificationToken, verificationAdmin], (req, res) => {
 
 /* Delete, permite eliminar un usuario de los registros de la base de datos (Eliminacón fisica, y logica) */
   
-app.delete('/usuario/:id', verificationToken, (req, res) => {
+app.delete('/usuario/:id', [verificationToken, verificationAdmin], (req, res) => {
     
     let id = req.params.id;
 
