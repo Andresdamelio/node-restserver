@@ -28,8 +28,8 @@ let verificationToken = ( req, res, next ) =>{
 /*  Verificar rol administrador */
 
 let verificationAdmin = ( req, res, next ) =>{
+    
     let usuario = req.usuario;
-
 
     if(usuario.role !== 'ADMIN_ROLE'){
         return res.json({
@@ -38,9 +38,8 @@ let verificationAdmin = ( req, res, next ) =>{
                 message: 'Acción permitida solo para administradores'
             }
         });
-
-        next();
     }
+    next();
 }
 
 module.exports = {

@@ -92,7 +92,7 @@ app.post('/usuario', [verificationToken, verificationAdmin], (req, res) => {
 
 /* Método put, permite modificar los datos de un usuario según su id, se hace uso del modulo underscore para obtener solo los atributos que se pueden modificar del usuario */
   
-app.put('/usuario/:id', verificationToken, (req, res) => {
+app.put('/usuario/:id', [verificationToken, verificationAdmin], (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
