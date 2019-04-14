@@ -26,7 +26,7 @@ process.env.SEED = process.env.SEED || 'secret-seed-development';
 /* 
 =================== Google client id==================
 */
-process.env.CLIENT_ID = process.env.CLIENT_ID || ' 863784944024-dgkuh4mtu4mqec3rjhuthumo27hh18p2.apps.googleusercontent.com';
+process.env.CLIENT_ID = process.env.CLIENT_ID || '863784944024-dgkuh4mtu4mqec3rjhuthumo27hh18p2.apps.googleusercontent.com';
 
 /* 
 =================== Base de datos ==================
