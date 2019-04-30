@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
 const Categoria = require('../models/categoria')
-const { verificationToken } = require('../middlewares/autenticacion')
+const { verificationToken, verificationAdmin } = require('../middlewares/autenticacion')
 
 
 /* Mostar todas las categorias */
-app.get('/categoria', verificationToken (req, res)=>{
+app.get('/categoria', verificationToken, (req, res)=>{
     Categoria.find({})
     .excec((err, categoriass) => {
         if( err ){
@@ -15,22 +15,59 @@ app.get('/categoria', verificationToken (req, res)=>{
             })
         }
 
-        res.json(
+        res.json({
             ok:true,
             categorias
-        )
+        })
     })
 })
 
 /* Mostar una categoria por id */
-app.get('/categoria/:id', verificationToken (req, res)=>{
+app.get('/categoria/:id', verificationToken, (req, res)=>{
     let id = req.params.id
+
+    Categoria.findById(id, (err, categoria) => {
+        if( err ){
+            return res.status(200).json({
+                ok: false,
+                err
+            })
+        }
+
+        res.json({
+            ok: true,
+            categoria
+        })
+    })
 })
 
 /* Crear una nueva categoria */
-app.post('/categoria', (req, res)=>{
+app.post('/categoria', verificationToken, (req, res)=>{
+    let body = req.body;
+    let usuario = req.usuario._id;
+
+    let categoria = new Categoria({
+        descripcion: body.descripcion,
+        usuario: usuario
+    })
+
+    categoria.save( (err, categoriaBD)=>{
+        if( err ){
+            return res.status(400).json({
+                ok:false,
+                err
+            })
+        }
+
+        res.json({
+            ok:true,
+            categoria: categoriaBD
+        })
+    } )
+
 
 })
+
 
 /* Actualizar una categoria */
 app.put('/categoria/:id', (req, res)=>{
