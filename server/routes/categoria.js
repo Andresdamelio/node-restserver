@@ -14,6 +14,15 @@ app.get('/categoria', verificationToken, (req, res)=>{
             })
         }
 
+        if( !categorias ){
+            return res.status(400).json({
+                ok:false,
+                err:{
+                    message: 'No hay categorias registradas'
+                }
+            })
+        }
+
         res.json({
             ok:true,
             categorias
