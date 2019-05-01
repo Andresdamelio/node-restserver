@@ -45,7 +45,35 @@ app.get('/producto', verificationToken, (req,res)=>{
 
 /* Obtener un prodcuto por id */
 app.get('/producto/:id', verificationToken, (req,res)=>{
-    /* populate */
+    
+    let id = req.params.id;
+
+    Producto.findById(id)
+        .populate('categoria', 'descripcion')
+        .populate('usuario', 'nombre, email')
+        .exec( (err, productoBD) =>{
+            if( err ){
+                return res.status(500).json({
+                    ok:false,
+                    err
+                })
+            }
+
+            if( !productoBD ){
+                res.status(400).json({
+                    ok:false,
+                    err: {
+                        message: 'No existe un producto con el id indicado'
+                    }
+                })
+            }
+
+            res.json({
+                ok:true,
+                producto: productoBD
+            })
+        })
+    
 })
 
 /* Crear un nuevo producto */
