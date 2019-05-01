@@ -5,7 +5,7 @@ const { verificationToken, verificationAdmin } = require('../middlewares/autenti
 
 
 /* Mostar todas las categorias */
-app.get('/categoria', [verificationToken,verificationAdmin], (req, res)=>{
+app.get('/categoria', verificationToken, (req, res)=>{
     Categoria.find({}, (err, categorias) => {
         if( err ){
             return res.status(400).json({
@@ -30,6 +30,15 @@ app.get('/categoria/:id', verificationToken, (req, res)=>{
             return res.status(200).json({
                 ok: false,
                 err
+            })
+        }
+
+        if( !categoria ){
+            return res.status(400).json({
+                ok:false,
+                err:{
+                    message: 'Categoria no encontrada'
+                }
             })
         }
 
@@ -67,12 +76,28 @@ app.post('/categoria', [verificationToken,verificationAdmin], (req, res)=>{
 
 
 /* Actualizar una categoria */
-app.put('/categoria/:id', (req, res)=>{
+app.put('/categoria/:id', [verificationToken, verificationAdmin], (req, res)=>{
+    
+    let id = req.params.id
+    let body = req.body
 
+    Categoria.findByIdAndUpdate(id, body, {new: true, runValidators:true, context:'query'}, (err, categoriaBD)=>{
+        if( err ){
+            return res.status(400).json({
+                ok:false,
+                err
+            })
+        }
+
+        res.json({
+            ok:true,
+            categoria: categoriaBD
+        })
+    })
 })
 
 /* Borrar una categoria (eliminado fisico) */
-app.delete('/categoria/:id', (req, res)=>{
+app.delete('/categoria/:id',  verificationToken, (req, res)=>{
     let id = req.params.id
 
     Categoria.findByIdAndRemove(id, (err, categoriaBorrada)=>{
