@@ -3,8 +3,14 @@ const express = require('express');
 const app = express();
 const { verificationToken } = require('../middlewares/autenticacion');
 const Producto = require('../models/producto');
+const _ = require('underscore');
 
-/* Obtener todos los productos */
+
+/*
+===============================================================
+             Obtener todos los productos
+===============================================================
+*/
 app.get('/producto', verificationToken, (req,res)=>{
 
     let limite = req.query.limite || 5;
@@ -40,10 +46,15 @@ app.get('/producto', verificationToken, (req,res)=>{
                 productos
             })
         })
-    /* Traer todos los productos, populate de usuario y categoria y paginacion */
 })
 
-/* Obtener un prodcuto por id */
+
+/*
+===============================================================
+             Obtener un producto por id 
+===============================================================
+*/
+
 app.get('/producto/:id', verificationToken, (req,res)=>{
     
     let id = req.params.id;
@@ -76,7 +87,12 @@ app.get('/producto/:id', verificationToken, (req,res)=>{
     
 })
 
-/* Crear un nuevo producto */
+
+/*
+===============================================================
+             Crear un nuevo producto
+===============================================================
+*/
 app.post('/producto', verificationToken, (req, res)=>{
     
     let body = req.body;
@@ -117,12 +133,51 @@ app.post('/producto', verificationToken, (req, res)=>{
 
 })
 
-/*  Modificar un producto por id */
+
+/*
+===============================================================
+             Modificar un producto por id 
+===============================================================
+*/
 app.put('/producto/:id', verificationToken, (req,res)=>{
-    /* populate */
+    
+    let id = req.params.id;
+    let id_user = req.usuario._id;
+    let body = _.pick(req.body, ['nombre', 'precioUni', 'descripcion', 'categoria']);
+    body.usuario = id_user
+
+    Producto.findByIdAndUpdate(id, body, {new:true, runValidators: true, context:'query'}, (err, productoModificado)=>{
+
+        if( err ){
+            return res.status(500).json({
+                ok:false,
+                err
+            })
+        }
+
+        if( !productoModificado ){
+            return res.status(400).json({
+                ok:false,
+                err:{
+                    message: 'Producto no encontrado'
+                }
+            })
+        }
+
+        res.json({
+            ok:true,
+            producto: productoModificado
+        })
+    })
 })
 
-/* Eliminar un producto por id, (eliminacion logica) */
+
+
+/*
+===============================================================
+             Eliminar un producto por id, (eliminacion logica) 
+===============================================================
+*/
 app.delete('/producto/:id', verificationToken, (req,res)=>{
     
     disponibilidad = {
@@ -158,9 +213,6 @@ app.delete('/producto/:id', verificationToken, (req,res)=>{
     })
 
 })
-
-
-
 
 
 module.exports = app
