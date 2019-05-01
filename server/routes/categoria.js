@@ -8,7 +8,7 @@ const { verificationToken, verificationAdmin } = require('../middlewares/autenti
 app.get('/categoria', verificationToken, (req, res)=>{
     Categoria.find({}, (err, categorias) => {
         if( err ){
-            return res.status(400).json({
+            return res.status(500).json({
                 of:false,
                 err
             })
@@ -70,6 +70,13 @@ app.post('/categoria', [verificationToken,verificationAdmin], (req, res)=>{
 
     categoria.save( (err, categoriaBD)=>{
         if( err ){
+            return res.status(500).json({
+                ok:false,
+                err
+            })
+        }
+
+        if( !categoriaBD ){
             return res.status(400).json({
                 ok:false,
                 err
