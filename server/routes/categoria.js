@@ -5,29 +5,35 @@ const { verificationToken, verificationAdmin } = require('../middlewares/autenti
 
 
 /* Mostar todas las categorias */
+/* la opcion .populate() permite verificar si existe un objectId en los registros de la coleccion y permite cargar la informacion de ese elemento, el primer argumento es el nombre y el segundo los campos */
 app.get('/categoria', verificationToken, (req, res)=>{
-    Categoria.find({}, (err, categorias) => {
-        if( err ){
-            return res.status(500).json({
-                of:false,
-                err
-            })
-        }
-
-        if( !categorias ){
-            return res.status(400).json({
-                ok:false,
-                err:{
-                    message: 'No hay categorias registradas'
+    Categoria.find({})
+        .sort('descripcion')
+        .populate('usuario', 'nombre email')
+        .exec(
+            (err, categorias) => {
+                if( err ){
+                    return res.status(500).json({
+                        of:false,
+                        err
+                    })
                 }
-            })
-        }
-
-        res.json({
-            ok:true,
-            categorias
-        })
-    })
+        
+                if( !categorias ){
+                    return res.status(400).json({
+                        ok:false,
+                        err:{
+                            message: 'No hay categorias registradas'
+                        }
+                    })
+                }
+        
+                res.json({
+                    ok:true,
+                    categorias
+                })
+            }
+        )  
 })
 
 /* Mostar una categoria por id */
