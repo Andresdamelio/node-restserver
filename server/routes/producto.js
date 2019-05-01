@@ -124,7 +124,39 @@ app.put('/producto/:id', verificationToken, (req,res)=>{
 
 /* Eliminar un producto por id, (eliminacion logica) */
 app.delete('/producto/:id', verificationToken, (req,res)=>{
-    /* populate */
+    
+    disponibilidad = {
+        disponible: false
+    }
+
+    let id = req.params.id;
+
+    Producto.findByIdAndUpdate(id, disponibilidad, {new: true}, (err, productoEliminado) => {
+
+        if( err ){
+            res.status(500).json({
+                ok:false,
+                err
+            })
+        }
+
+        if( !productoEliminado ){
+            res.status(400).json({
+                ok:false,
+                err:{
+                    message: 'El producto que desea eliminar no esta disponible'
+                }
+            })
+        }
+
+        res.json({
+            ok:true,
+            message: 'Producto eliminado con exito',
+            producto: productoEliminado
+        })
+
+    })
+
 })
 
 
