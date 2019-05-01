@@ -5,9 +5,8 @@ const { verificationToken, verificationAdmin } = require('../middlewares/autenti
 
 
 /* Mostar todas las categorias */
-app.get('/categoria', verificationToken, (req, res)=>{
-    Categoria.find({})
-    .excec((err, categoriass) => {
+app.get('/categoria', [verificationToken,verificationAdmin], (req, res)=>{
+    Categoria.find({}, (err, categorias) => {
         if( err ){
             return res.status(400).json({
                 of:false,
@@ -42,7 +41,7 @@ app.get('/categoria/:id', verificationToken, (req, res)=>{
 })
 
 /* Crear una nueva categoria */
-app.post('/categoria', verificationToken, (req, res)=>{
+app.post('/categoria', [verificationToken,verificationAdmin], (req, res)=>{
     let body = req.body;
     let usuario = req.usuario._id;
 
@@ -63,9 +62,7 @@ app.post('/categoria', verificationToken, (req, res)=>{
             ok:true,
             categoria: categoriaBD
         })
-    } )
-
-
+    })
 })
 
 
