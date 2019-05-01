@@ -73,7 +73,30 @@ app.put('/categoria/:id', (req, res)=>{
 
 /* Borrar una categoria (eliminado fisico) */
 app.delete('/categoria/:id', (req, res)=>{
+    let id = req.params.id
 
+    Categoria.findByIdAndRemove(id, (err, categoriaBorrada)=>{
+        if( err ){
+            return res.status(500).json({
+                ok:false,
+                err
+            })
+        }
+
+        if( !categoriaBorrada ){
+            return res.status(400).json({
+                ok:false,
+                err:{
+                    message: 'Error, categoria no encontrada'
+                }
+            })
+        }
+
+        res.json({
+            ok:true,
+            categoriaBorrada
+        })
+    })
 })
 
 
