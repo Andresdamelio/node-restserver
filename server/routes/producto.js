@@ -46,7 +46,7 @@ app.get('/producto', verificationToken, (req,res)=>{
                 productos
             })
         })
-})
+});
 
 
 /*
@@ -168,8 +168,7 @@ app.post('/producto', verificationToken, (req, res)=>{
             producto: productoBD
         })
     })
-
-})
+});
 
 
 /*
@@ -207,7 +206,7 @@ app.put('/producto/:id', verificationToken, (req,res)=>{
             producto: productoModificado
         })
     })
-})
+});
 
 
 
@@ -249,8 +248,7 @@ app.delete('/producto/:id', verificationToken, (req,res)=>{
         })
 
     })
-
-})
+});
 
 
 module.exports = app
