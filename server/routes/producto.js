@@ -85,7 +85,45 @@ app.get('/producto/:id', verificationToken, (req,res)=>{
             })
         })
     
-})
+});
+
+/*
+===============================================================
+             Buscar productos
+===============================================================
+*/
+
+app.get('/producto/buscar/:termino', verificationToken, (req, res)=>{
+    
+    let termino = req.params.termino;
+    let regex = new RegExp(termino, 'i')
+    Producto.find({ nombre: regex })
+        .populate('categoria', 'descripcion')
+        .exec( (err, productos) => {
+            if( err ){
+                return res.status(500).json({
+                    ok:false,
+                    err
+                })
+            }
+
+            if( !productos ){
+                res.status(400).json({
+                    ok:false,
+                    err:{
+                        message:`Ǹo se han encontrado resultados con la palabra ${termino}`
+                    }
+                })
+            }
+
+            res.status(201).json({
+                ok:true,
+                productos
+            })
+        });
+});
+
+
 
 
 /*
@@ -124,7 +162,7 @@ app.post('/producto', verificationToken, (req, res)=>{
             })
         }
 
-        res.json({
+        res.status(201).json({
             ok: true,
             message: 'Producto guardado con exito',
             producto: productoBD
